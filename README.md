@@ -298,6 +298,7 @@ $ echo "YmFy" | base64 --decode
 bar
 Secrets can be mounted as data volumes or be exposed as environment variables to be used by a container in a pod. Here we'll mount our above secret as a volume.
 
+### Basic Pod
 apiVersion: v1
 kind: Pod
 metadata:
@@ -313,7 +314,8 @@ spec:
   - name: secret-volume
     secret:
       secretName: my-secret
-Service Accounts
+
+### Service Accounts
 When pods are created by K8s they are provided an identify via the service account. In most cases, pods use the default service account, but it can be specified directly.
 
 apiVersion: v1
