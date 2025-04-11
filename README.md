@@ -185,10 +185,14 @@ Configuration covers how run-time 'config' data is provided to your applications
 Config Maps / Environment Variables
 The exam is about application development and its support within Kubernetes. With that said, high on the list of objectives is setting up config options and secrets for your applications. To create the most basic config map with a key value pair, see below.
 
+```bash
 $ kubectl create configmap app-config --from-literal=key123=value123
 configmap "app-config" created
+```
+
 There are many ways to map config map items to environment variables within a container process. One quick, but tricky (syntax) option is shown below. This would be for a simple nginx container.
 
+```bash
 spec:
   containers:
   - image: nginx
@@ -196,8 +200,11 @@ spec:
     envFrom:
     - configMapRef:
         name: app-config
+```
+
 Here is another way to map a specific value to a specific environment variable value.
 
+```bash
   containers:
   - image: nginx
     name: nginx
@@ -207,13 +214,18 @@ Here is another way to map a specific value to a specific environment variable v
           configMapKeyRef:
             name: app-config
             key: key123
+```
+
 Now to verify it worked.
 
+```bash
 $ kubectl exec -it nginx /bin/bash
 root@nginx:/# env
 HOSTNAME=nginx
 SPECIAL_APP_KEY=value123
 KUBERNETES_PORT_443_TCP_PROTO=tcp
+```
+
 ...
 Security Contexts
 Security contexts can be applied at either the pod or container level. Of course pod-level contexts apply to all containers within that pod. There are several ways of defining privileges and access controls with these contexts.
