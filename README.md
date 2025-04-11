@@ -192,7 +192,7 @@ configmap "app-config" created
 
 There are many ways to map config map items to environment variables within a container process. One quick, but tricky (syntax) option is shown below. This would be for a simple nginx container.
 
-```bash
+```yaml
 spec:
   containers:
   - image: nginx
@@ -204,7 +204,7 @@ spec:
 
 Here is another way to map a specific value to a specific environment variable value.
 
-```bash
+```yaml
   containers:
   - image: nginx
     name: nginx
@@ -226,12 +226,12 @@ SPECIAL_APP_KEY=value123
 KUBERNETES_PORT_443_TCP_PROTO=tcp
 ```
 
-...
 Security Contexts
 Security contexts can be applied at either the pod or container level. Of course pod-level contexts apply to all containers within that pod. There are several ways of defining privileges and access controls with these contexts.
 
 These concepts are covered well in the tasks section below, but here is a basic RunAs example from the doc that shows both pod and container contexts being used.
 
+```yaml
 apiVersion: v1
 kind: Pod
 spec:
@@ -243,9 +243,12 @@ spec:
     securityContext:
       runAsUser: 2000
       allowPrivilegeEscalation: false
+```
+
 App Resource Requirements
 Defining the memory and cpu requirements for your containers is something that should always be done. It allows for more efficient scheduling and better overall hygiene for your application environment. Again, covered well in the tasks section below, but here is a brief snippet for the standard mem/cpu specification.
 
+```yaml
 apiVersion: v1
 kind: Pod
 spec:
@@ -259,6 +262,7 @@ spec:
       requests:
         memory: 100Mi
         cpu: 100m
+```
 Now to verify:
 
 $ kubectl describe po stress
@@ -311,6 +315,7 @@ bar
 Secrets can be mounted as data volumes or be exposed as environment variables to be used by a container in a pod. Here we'll mount our above secret as a volume.
 
 ### Basic Pod
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -326,10 +331,12 @@ spec:
   - name: secret-volume
     secret:
       secretName: my-secret
+```
 
 ### Service Accounts
 When pods are created by K8s they are provided an identify via the service account. In most cases, pods use the default service account, but it can be specified directly.
 
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -337,3 +344,4 @@ metadata:
 spec:
   serviceAccountName: build-robot
   ...
+```
